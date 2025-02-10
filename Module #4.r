@@ -12,10 +12,10 @@ FD <- c(0, 1, 0, 1, 0, 1, 0, 1, 1, 1)
 df <- data.frame(frequency, BP, first, second, FD)
 
 # Boxplots
-visit1plot <- ggplot(df, aes(x = as.factor(first), y = BP)) +geom_boxplot() + labs(title = "BP vs 1st Visit")
+visit1plot <- ggplot(df, aes(x = (first), y = BP)) +geom_boxplot() + labs(title = "BP vs 1st Visit")
 print(visit1plot)
 
-visit2plot <- ggplot(df, aes(x = as.factor(second), y = BP)) +geom_boxplot() + labs(title = "BP vs 2nd Visit")
+visit2plot <- ggplot(df, aes(x = (second), y = BP)) +geom_boxplot() + labs(title = "BP vs 2nd Visit")
 print(visit2plot)
 
 # Histograms
