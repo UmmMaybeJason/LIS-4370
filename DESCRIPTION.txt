@@ -1,0 +1,8 @@
+Package: TurtleTran
+Title: What the package does - Takes in a data frame and produces visual representation of the data in a graph.
+Version: 0.1
+Authors@R: "Jason Tran <jasontran1@usf.edu> [aut, cre]"
+Description: What the package does - The package takes data and variables in a dataframe and graphs them out. It separates the variables into different axis and factors of ggplot2.
+Depends: R (>= 4.4.2)
+License: What license is it under? CCO
+LazyData: true
