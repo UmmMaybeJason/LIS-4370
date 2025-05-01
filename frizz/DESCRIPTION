@@ -1,0 +1,19 @@
+Package: frizz
+Title: Takes stats from an ultiamte frisbee team and displays them in graphs
+Version: 0.0.0.9000
+Authors@R: 
+    person("Jason", "Tran", , "jasontran1@usf.edu", role = c("aut", "cre"))
+Description: This package takes a CSV from Ultianalytics.com of any team, and has various functions within it to clean the data and graph the data.
+License: `use_mit_license()`, `use_gpl3_license()` or friends to pick a
+    license. CCO
+Encoding: UTF-8
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.3.2
+Imports: 
+    ggplot2,
+    dplyr,
+    tidyr,
+    devtools
+Depends: 
+    R (>= 3.5)
+LazyData: true
