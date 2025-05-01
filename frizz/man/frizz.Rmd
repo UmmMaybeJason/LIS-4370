@@ -1,0 +1,112 @@
+---
+title: "frizz"
+author: jason tran
+output: html_document
+---
+
+### caps_name function ###
+```{r}
+cap_names <- function(a, b) {
+  names <- as.character(a[[b]])
+  sapply(names, function(x) {
+    if (is.na(x) || x == "") x
+    else paste0(toupper(substring(x, 1, 1)), substring(x, 2))
+  })
+}
+```
+
+### caps_name explanation ###
+### The caps name function takes a, the data, and b, the column in the data, and capitalizes the first letter within that column. It changes the column b to characters and stores it as a vector names. After that the sapply is applied to names, where it skips over any value in the column with an "NA", and then the toupper function makes the first letter uppercase. The substring function takes the first character of the name.
+
+### Basic functions ###
+```{r}
+pulls <- function(a, b) {
+  count <- sum(data$Action == "Pull" & data$Defender == player_name, na.rm = TRUE)
+  cat("Number of pulls by", player_name, ":", count, "\n")
+}
+
+goals <- function(a, b) {
+  count <- sum(a$Action == "Goal" & a$Receiver == b, na.rm = TRUE)
+  cat("Number of goals by", b, ":", count, "\n")
+}
+
+catches <- function(a, b) {
+  count <- sum(a$Action == "Catch" & a$Receiver == b, na.rm = TRUE)
+  cat("Number of catches by", b, ":", count, "\n")
+}
+
+drops <- function(a, b) {
+  count <- sum(a$Action == "Drop" & a$Receiver == b, na.rm = TRUE)
+  cat("Number of drops by", b, ":", count, "\n")
+}
+```
+
+### Basic function explanations###
+### The functions take the name of the receiver and store the desired stat as a count, then the functions print out the message with the count. In the sum function, we filter out the desired action from the "Action" column as well as the name of the player to find out how many times a given player did the action they did.I then copied that code adjust the action and receiver/defender based off of the function.
+
+### Advanced functions ###
+```{r}
+receiver_stats <- function(a, b) {
+  catches <- sum(a$Action == "Catch" & a$Receiver == b, na.rm = TRUE)
+  drops <- sum(a$Action == "Drop" & a$Receiver == b, na.rm = TRUE)
+  touches <- catches + drops
+
+  drop_rate <- ifelse(touches > 0, round(drops / touches * 100, 2), 0)
+  catch_rate <- ifelse(touches > 0, round(catches / touches * 100, 2), 0)
+  cat("Receiving stats for", b, ":\n",
+      "Drops:", drops, "\n",
+      "Catches:", catches, "\n",
+      "Drop rate:", drop_rate, "%\n",
+      "Catch rate:", catch_rate, "%\n")
+}
+
+thrower_stats <- function(a, b) {
+  completions <- sum(a$Action == "Catch" & a$Passer == b, na.rm = TRUE)
+  throwaways <- sum(a$Action == "Throwaway" & a$Passer == b, na.rm = TRUE)
+  attempts <- completions + throwaways
+
+  throwaway_rate <- ifelse(attempts > 0, round(throwaways / attempts * 100, 2), 0)
+  completion_rate <- ifelse(attempts > 0, round(completions / attempts * 100, 2), 0)
+
+  cat("Throwing stats for", b, ":\n",
+      "Completions:", completions, "\n",
+      "Throwaways:", throwaways, "\n",
+      "Throwaway rate:", throwaway_rate, "%\n",
+      "Completion rate:", completion_rate, "%\n")
+}
+```
+
+### Advanced Function explanations ###
+### Althought the advanced functions have more code, they are similar to that code of the basic functions, they just contain multiple simply functions strung together. What they add to the basic functions is the calculation of "rates" which use elseif functions to make sure they can be calculated as long as the number of touches or attempts is greater than 0. The rates are then rounded to the nearest 2 decimals points and printed out as an output.
+
+### Catches Graph function ###
+```{r}
+catches_graph <- function(data, ...) {
+  players <- c(...)
+  colors <- c("#3300FF", "#9900FF", "#FF00FF", "#9999FF", "#9933CC", "#FF99FF")
+
+  catch_count <- sapply(players, function(player) {
+    sum(data$Action == "Catch" & data$Receiver == player, na.rm = TRUE)
+  })
+
+  p_data <- data.frame(
+    Player = factor(players, levels = players),
+    Catches = catch_count
+  )
+
+  ggplot(p_data, aes(x = Player, y = Catches, fill = Player)) +
+    geom_bar(stat = "identity") +
+    scale_fill_manual(values = colors[1:length(players)]) +
+    geom_text(aes(label = Catches), size = 4) +
+    labs(title = "Total Catches by Player",
+         x = "Player Name",
+         y = "Number of Catches") +
+    theme(legend.position = "right",
+          plot.title = element_text(hjust = 0.5),
+          plot.background = element_rect(fill = "aliceblue"),
+          panel.background = element_rect(fill = "mintcream"))
+
+}
+```
+### Catches Graph explanation ###
+### Within the catches graph function, it takes an input of any amount of players and graphs the amount of catches they have compared to other players on the team. There is a custom color palette as well. It first starts off by getting the catch count of a player and doing that to every player. It then creates a new data frame of the catch counts of players. The catches and plotted on the Y axis while the players are plotted on the x axis, and the fill is set to player so each player has a different color.The scale fill is set to the length of the player names (resource I used to help with this is listed on the blog) and I also added various visual elements like adding a legend, and different background colors.
